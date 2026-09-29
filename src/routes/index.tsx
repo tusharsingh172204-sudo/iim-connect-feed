@@ -55,6 +55,10 @@ function Board() {
       });
       return;
     }
+    if (!user.email?.toLowerCase().endsWith("@iimnagpur.ac.in")) {
+      toast.error("Starring is for @iimnagpur.ac.in accounts only.");
+      return;
+    }
     toggle.mutate(n);
   }
 
