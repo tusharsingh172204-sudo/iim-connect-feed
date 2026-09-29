@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Club posting rights come from `club_logins` (email -> club) checked by `my_club_id()` in RLS; why: shared club logins, no client-side trust.
