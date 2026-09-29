@@ -37,6 +37,11 @@ function AuthPage() {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) toast.error(error.message);
     } else {
+      if (!email.trim().toLowerCase().endsWith("@iimnagpur.ac.in")) {
+        toast.error("Sign-ups are only open to @iimnagpur.ac.in email addresses.");
+        setBusy(false);
+        return;
+      }
       const { error } = await supabase.auth.signUp({
         email, password, options: { emailRedirectTo: window.location.origin },
       });
@@ -47,7 +52,10 @@ function AuthPage() {
   }
 
   async function google() {
-    const res = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
+    const res = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin,
+      extraParams: { hd: "iimnagpur.ac.in", prompt: "select_account" },
+    });
     if (res.error) toast.error("Google sign-in failed");
   }
 
@@ -57,7 +65,7 @@ function AuthPage() {
       <main className="mx-auto max-w-md px-4 py-10">
         <div className="border-2 border-foreground bg-card p-6">
           <h2 className="text-2xl">{mode === "in" ? "SIGN IN" : "CREATE ACCOUNT"}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Use your college email. Club desks use their club login.</p>
+          <p className="mt-1 text-sm text-muted-foreground">Students: sign up with your @iimnagpur.ac.in email. Club desks: use the login you were given.</p>
           <button onClick={google} className="mt-5 w-full border-2 border-foreground bg-background py-2 font-semibold hover:bg-highlight">
             Continue with Google
           </button>
