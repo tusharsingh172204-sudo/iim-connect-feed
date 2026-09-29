@@ -51,6 +51,15 @@ function AuthPage() {
     setBusy(false);
   }
 
+  async function forgot() {
+    if (!email) { toast.error("Enter your email above first."); return; }
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    if (error) toast.error(error.message);
+    else toast.success("If that email has an account, a link to set your password is on its way.");
+  }
+
   async function google() {
     const res = await lovable.auth.signInWithOAuth("google", {
       redirect_uri: window.location.origin,
@@ -79,7 +88,12 @@ function AuthPage() {
               {busy ? "…" : mode === "in" ? "Sign in" : "Sign up"}
             </button>
           </form>
-          <button onClick={() => setMode(mode === "in" ? "up" : "in")} className="mt-4 text-sm underline">
+          {mode === "in" && (
+            <button onClick={forgot} className="mt-3 block text-sm underline">
+              Forgot password / club setting up for the first time?
+            </button>
+          )}
+          <button onClick={() => setMode(mode === "in" ? "up" : "in")} className="mt-3 block text-sm underline">
             {mode === "in" ? "New here? Create an account" : "Have an account? Sign in"}
           </button>
         </div>
