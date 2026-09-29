@@ -6,10 +6,10 @@ export function NoticeCard({
   notice, club, starred, onToggleStar, urgent, actions,
 }: {
   notice: Notice;
-  club?: Club;
+  club?: Club | undefined;
   starred: boolean;
   onToggleStar?: () => void;
-  urgent?: boolean;
+  urgent?: boolean | undefined;
   actions?: React.ReactNode;
 }) {
   return (
