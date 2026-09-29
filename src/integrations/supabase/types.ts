@@ -14,16 +14,132 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      club_logins: {
+        Row: {
+          club_id: string
+          email: string
+        }
+        Insert: {
+          club_id: string
+          email: string
+        }
+        Update: {
+          club_id?: string
+          email?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "club_logins_club_id_fkey"
+            columns: ["club_id"]
+            isOneToOne: false
+            referencedRelation: "clubs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      clubs: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          slug: string
+          tagline: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          slug: string
+          tagline?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          slug?: string
+          tagline?: string
+        }
+        Relationships: []
+      }
+      notices: {
+        Row: {
+          body: string
+          club_id: string
+          created_at: string
+          created_by: string | null
+          due_at: string | null
+          id: string
+          kind: Database["public"]["Enums"]["notice_kind"]
+          link: string | null
+          title: string
+        }
+        Insert: {
+          body?: string
+          club_id: string
+          created_at?: string
+          created_by?: string | null
+          due_at?: string | null
+          id?: string
+          kind?: Database["public"]["Enums"]["notice_kind"]
+          link?: string | null
+          title: string
+        }
+        Update: {
+          body?: string
+          club_id?: string
+          created_at?: string
+          created_by?: string | null
+          due_at?: string | null
+          id?: string
+          kind?: Database["public"]["Enums"]["notice_kind"]
+          link?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notices_club_id_fkey"
+            columns: ["club_id"]
+            isOneToOne: false
+            referencedRelation: "clubs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stars: {
+        Row: {
+          created_at: string
+          notice_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          notice_id: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          notice_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stars_notice_id_fkey"
+            columns: ["notice_id"]
+            isOneToOne: false
+            referencedRelation: "notices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      my_club_id: { Args: never; Returns: string }
     }
     Enums: {
-      [_ in never]: never
+      notice_kind: "notice" | "deadline" | "extension" | "timeline"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +266,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      notice_kind: ["notice", "deadline", "extension", "timeline"],
+    },
   },
 } as const
