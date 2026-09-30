@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { SiteHeader } from "@/components/SiteHeader";
 import { NoticeCard } from "@/components/NoticeCard";
 import { fetchClubs, fetchMyClubId, fetchNotices, KIND_LABEL, type Notice } from "@/lib/board";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/post")({
   head: () => ({
@@ -15,6 +16,8 @@ export const Route = createFileRoute("/post")({
       { name: "description", content: "Club logins post notices, deadlines, extensions and timelines for their club." },
       { property: "og:title", content: "Club desk — The Noticeboard" },
       { property: "og:description", content: "Where IIM Nagpur clubs post their notices and deadlines." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: ClubDesk,
@@ -34,8 +37,9 @@ function ClubDesk() {
 
   const create = useMutation({
     mutationFn: async () => {
+      if (!myClub.data) throw new Error("This account is not linked to a club.");
       const { error } = await supabase.from("notices").insert({
-        club_id: myClub.data!,
+        club_id: myClub.data,
         kind: form.kind,
         title: form.title.trim(),
         body: form.body.trim(),
@@ -66,7 +70,7 @@ function ClubDesk() {
     content = (
       <Box>
         <p>Sign in with your club's login to post notices.</p>
-        <Link to="/auth" className="mt-3 inline-block bg-foreground px-4 py-2 font-semibold text-background">Sign in</Link>
+        <Button asChild className="mt-3"><Link to="/auth">Sign in</Link></Button>
       </Box>
     );
   else if (!myClub.data)
@@ -82,38 +86,37 @@ function ClubDesk() {
       <div className="grid gap-8 md:grid-cols-[1fr_1fr]">
         <form
           onSubmit={(e) => { e.preventDefault(); create.mutate(); }}
-          className="space-y-3 border-2 border-foreground bg-card p-5"
+          className="space-y-4 border border-border bg-card p-5 sm:p-6"
         >
-          <h2 className="text-2xl">POST FOR {club?.name.toUpperCase()}</h2>
+          <h2 className="text-2xl font-bold">Post for {club?.name}</h2>
           <div className="flex flex-wrap gap-2">
             {(Object.keys(KIND_LABEL) as Notice["kind"][]).map((k) => (
-              <button type="button" key={k} onClick={() => setForm({ ...form, kind: k })}
-                className={`border-2 border-foreground px-3 py-1 font-mono text-xs uppercase ${form.kind === k ? "bg-foreground text-background" : ""}`}>
+              <Button type="button" size="sm" variant={form.kind === k ? "default" : "outline"} key={k} onClick={() => setForm({ ...form, kind: k })}>
                 {KIND_LABEL[k]}
-              </button>
+              </Button>
             ))}
           </div>
           <input required maxLength={140} placeholder="Headline" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })}
-            className="w-full border-2 border-foreground bg-background px-3 py-2 outline-none focus:border-urgent" />
+            className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:ring-1 focus:ring-ring" />
           <textarea rows={4} maxLength={2000} placeholder="Details" value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })}
-            className="w-full border-2 border-foreground bg-background px-3 py-2 outline-none focus:border-urgent" />
+            className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:ring-1 focus:ring-ring" />
           <label className="block font-mono text-xs uppercase">
             {needsDate ? "Due date & time (required)" : "Date & time (optional)"}
             <input type="datetime-local" required={needsDate} value={form.due} onChange={(e) => setForm({ ...form, due: e.target.value })}
-              className="mt-1 w-full border-2 border-foreground bg-background px-3 py-2 font-sans normal-case outline-none focus:border-urgent" />
+              className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 font-sans normal-case outline-none focus:ring-1 focus:ring-ring" />
           </label>
           <input type="url" placeholder="Link (form, doc…) — optional" value={form.link} onChange={(e) => setForm({ ...form, link: e.target.value })}
-            className="w-full border-2 border-foreground bg-background px-3 py-2 outline-none focus:border-urgent" />
-          <button disabled={create.isPending} className="w-full bg-urgent py-2 font-semibold text-urgent-foreground disabled:opacity-60">
+            className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:ring-1 focus:ring-ring" />
+          <Button disabled={create.isPending} className="w-full">
             {create.isPending ? "Posting…" : "Pin to the board"}
-          </button>
+          </Button>
         </form>
         <div>
-          <h2 className="mb-3 border-b-2 border-foreground pb-1 text-xl">YOUR POSTS ({mine.length})</h2>
+            <h2 className="mb-3 border-b border-border pb-3 text-xl font-bold">Your posts ({mine.length})</h2>
           <div className="space-y-4">
             {mine.map((n) => (
               <NoticeCard key={n.id} notice={n} club={club} starred={false}
-                actions={<button onClick={() => remove.mutate(n.id)} className="border-2 border-foreground px-3 py-1 text-xs font-semibold hover:bg-urgent hover:text-urgent-foreground">Remove</button>} />
+                actions={<Button onClick={() => remove.mutate(n.id)} variant="destructive" size="sm">Remove</Button>} />
             ))}
           </div>
         </div>
@@ -124,11 +127,11 @@ function ClubDesk() {
   return (
     <div className="min-h-screen">
       <SiteHeader />
-      <main className="mx-auto max-w-6xl px-4 py-8">{content}</main>
+      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">{content}</main>
     </div>
   );
 }
 
 function Box({ children }: { children: React.ReactNode }) {
-  return <div className="mx-auto max-w-md border-2 border-foreground bg-card p-6 text-sm">{children}</div>;
+  return <div className="mx-auto max-w-md border border-border bg-card p-6 text-sm">{children}</div>;
 }

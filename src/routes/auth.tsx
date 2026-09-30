@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/hooks/use-auth";
 import { SiteHeader } from "@/components/SiteHeader";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -13,6 +14,8 @@ export const Route = createFileRoute("/auth")({
       { name: "description", content: "Sign in to star notices and keep your own deadline tracker." },
       { property: "og:title", content: "Sign in — The Noticeboard" },
       { property: "og:description", content: "Sign in to star notices and keep your own deadline tracker." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: AuthPage,
@@ -71,31 +74,31 @@ function AuthPage() {
   return (
     <div className="min-h-screen">
       <SiteHeader />
-      <main className="mx-auto max-w-md px-4 py-10">
-        <div className="border-2 border-foreground bg-card p-6">
-          <h2 className="text-2xl">{mode === "in" ? "SIGN IN" : "CREATE ACCOUNT"}</h2>
+      <main className="mx-auto max-w-md px-4 py-12">
+        <div className="border border-border bg-card p-6 sm:p-8">
+          <h2 className="text-2xl font-bold">{mode === "in" ? "Sign in" : "Create account"}</h2>
           <p className="mt-1 text-sm text-muted-foreground">Students: sign up with your @iimnagpur.ac.in email. Club desks: use the login you were given.</p>
-          <button onClick={google} className="mt-5 w-full border-2 border-foreground bg-background py-2 font-semibold hover:bg-highlight">
+          <Button onClick={google} variant="outline" className="mt-5 w-full">
             Continue with Google
-          </button>
+          </Button>
           <div className="my-4 text-center font-mono text-xs uppercase text-muted-foreground">— or —</div>
           <form onSubmit={submit} className="space-y-3">
             <input required type="email" placeholder="you@iimnagpur.ac.in" value={email} onChange={(e) => setEmail(e.target.value)}
-              className="w-full border-2 border-foreground bg-background px-3 py-2 outline-none focus:border-urgent" />
+              className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:ring-1 focus:ring-ring" />
             <input required type="password" minLength={6} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}
-              className="w-full border-2 border-foreground bg-background px-3 py-2 outline-none focus:border-urgent" />
-            <button disabled={busy} className="w-full bg-foreground py-2 font-semibold text-background disabled:opacity-60">
+              className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:ring-1 focus:ring-ring" />
+            <Button disabled={busy} className="w-full">
               {busy ? "…" : mode === "in" ? "Sign in" : "Sign up"}
-            </button>
+            </Button>
           </form>
           {mode === "in" && (
-            <button onClick={forgot} className="mt-3 block text-sm underline">
+            <Button onClick={forgot} variant="link" className="mt-3 h-auto p-0 text-sm">
               Forgot password / club setting up for the first time?
-            </button>
+            </Button>
           )}
-          <button onClick={() => setMode(mode === "in" ? "up" : "in")} className="mt-3 block text-sm underline">
+          <Button onClick={() => setMode(mode === "in" ? "up" : "in")} variant="link" className="mt-3 h-auto p-0 text-sm">
             {mode === "in" ? "New here? Create an account" : "Have an account? Sign in"}
-          </button>
+          </Button>
         </div>
       </main>
     </div>

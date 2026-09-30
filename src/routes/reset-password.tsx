@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteHeader } from "@/components/SiteHeader";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/reset-password")({
   head: () => ({
@@ -12,6 +13,8 @@ export const Route = createFileRoute("/reset-password")({
       { property: "og:title", content: "Set your password — The Noticeboard" },
       { property: "og:description", content: "Choose a new password for your Noticeboard account." },
       { name: "robots", content: "noindex" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: ResetPassword,
@@ -46,19 +49,19 @@ function ResetPassword() {
     <div className="min-h-screen">
       <SiteHeader />
       <main className="mx-auto max-w-md px-4 py-10">
-        <div className="border-2 border-foreground bg-card p-6">
-          <h2 className="text-2xl">SET YOUR PASSWORD</h2>
+        <div className="border border-border bg-card p-6 sm:p-8">
+          <h2 className="text-2xl font-bold">Set your password</h2>
           {!ready ? (
             <p className="mt-3 text-sm">Open this page from the link in your email. Links expire after a while — request a new one from the sign-in page if needed.</p>
           ) : (
             <form onSubmit={submit} className="mt-4 space-y-3">
               <input required type="password" minLength={8} placeholder="New password (8+ characters)" value={pw} onChange={(e) => setPw(e.target.value)}
-                className="w-full border-2 border-foreground bg-background px-3 py-2 outline-none focus:border-urgent" />
+                className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:ring-1 focus:ring-ring" />
               <input required type="password" minLength={8} placeholder="Repeat password" value={pw2} onChange={(e) => setPw2(e.target.value)}
-                className="w-full border-2 border-foreground bg-background px-3 py-2 outline-none focus:border-urgent" />
-              <button disabled={busy} className="w-full bg-foreground py-2 font-semibold text-background disabled:opacity-60">
+                className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:ring-1 focus:ring-ring" />
+              <Button disabled={busy} className="w-full">
                 {busy ? "Saving…" : "Save password"}
-              </button>
+              </Button>
             </form>
           )}
         </div>

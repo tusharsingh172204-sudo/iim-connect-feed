@@ -6,8 +6,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { SiteHeader } from "@/components/SiteHeader";
 import { NoticeCard } from "@/components/NoticeCard";
-import { endOfTomorrow, fetchClubs, fetchNotices, fetchStars, KIND_LABEL, type Notice } from "@/lib/board";
+import { endOfTomorrow, fetchClubs, fetchNotices, fetchStars, KIND_LABEL, urgencyLevel, timeLeft, fmtDue, type Notice } from "@/lib/board";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -16,6 +17,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Urgent deadlines for today and tomorrow, your starred tracker, and every club notice at IIM Nagpur." },
       { property: "og:title", content: "The Noticeboard — IIM Nagpur" },
       { property: "og:description", content: "Every club notice, deadline and extension at IIM Nagpur in one place." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Board,
@@ -78,88 +81,105 @@ function Board() {
   );
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background">
       <SiteHeader />
-      <main className="mx-auto max-w-6xl px-4 py-6">
-        {/* Starred tracker */}
-        <section className="mb-8">
-          <SectionTitle label="My tracker" note={user ? `${starred.length} starred` : "Sign in to star"} />
+      <main className="mx-auto max-w-7xl border-x border-border bg-card xl:grid xl:min-h-[calc(100vh-85px)] xl:grid-cols-12">
+        <aside className="border-b border-border bg-background/60 p-5 sm:p-6 xl:col-span-3 xl:border-b-0 xl:border-r">
+          <SectionTitle label="Starred tracker" note={user ? `${starred.length}` : undefined} />
           {!user ? (
-            <div className="border-2 border-dashed border-foreground p-4 text-sm">
-              Star the notices that matter to you and they'll be waiting here every time you open the board.{" "}
-              <Link to="/auth" className="font-semibold underline">Sign in with your college email</Link>
+            <div className="border border-border bg-card p-4 text-sm">
+              <p className="text-muted-foreground">Save important notices across your devices.</p>
+              <Button asChild variant="link" className="mt-2 h-auto p-0"><Link to="/auth">Sign in with your college email</Link></Button>
             </div>
           ) : starred.length === 0 ? (
-            <p className="border-2 border-dashed border-foreground p-4 text-sm">Nothing starred yet — tap the ☆ on any notice below.</p>
+            <p className="border border-border bg-card p-4 text-sm text-muted-foreground">Nothing starred yet — select the star on any notice.</p>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{starred.map((n) => card(n))}</div>
+            <div className="border-t border-border">{starred.map((n) => card(n))}</div>
           )}
-        </section>
-
-        {/* Urgent */}
-        <section className="mb-8">
-          <div className="mb-3 flex items-baseline justify-between bg-urgent px-3 py-2 text-urgent-foreground">
-            <h2 className="text-xl sm:text-2xl">DUE TODAY & TOMORROW</h2>
-            <span className="font-mono text-xs uppercase">{urgent.length} closing soon</span>
-          </div>
-          {urgent.length === 0 ? (
-            <p className="border-2 border-dashed border-foreground p-4 text-sm">No deadlines in the next two days. Breathe.</p>
-          ) : (
-            <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{urgent.map((n) => <li key={n.id}>{card(n, true)}</li>)}</ol>
-          )}
-        </section>
-
-        {/* All notices */}
-        <section>
-          <SectionTitle label="All notices" note={`${filtered.length} shown`} />
-          <div className="mb-3 flex gap-2 overflow-x-auto pb-1">
+          <div className="mt-8">
+            <SectionTitle label="Filters" />
+            <p className="mb-2 font-mono text-[10px] font-semibold uppercase text-muted-foreground">Clubs</p>
+            <div className="flex flex-wrap gap-1.5">
             <Chip active={club === "all"} onClick={() => setClub("all")}>All clubs</Chip>
             {(clubs.data ?? []).map((c) => (
               <Chip key={c.id} active={club === c.id} onClick={() => setClub(c.id)}>{c.name}</Chip>
             ))}
-          </div>
-          <div className="mb-4 flex gap-2 overflow-x-auto pb-1">
+            </div>
+            <p className="mb-2 mt-5 font-mono text-[10px] font-semibold uppercase text-muted-foreground">Notice type</p>
+            <div className="flex flex-wrap gap-1.5">
             <Chip small active={kind === "all"} onClick={() => setKind("all")}>Everything</Chip>
             {Object.entries(KIND_LABEL).map(([k, l]) => (
               <Chip small key={k} active={kind === k} onClick={() => setKind(k)}>{l}</Chip>
             ))}
+            </div>
+          </div>
+        </aside>
+
+        <section className="min-w-0 xl:col-span-6">
+          <div className="flex items-baseline justify-between border-b border-border px-5 py-4 sm:px-6">
+            <h2 className="text-xl font-bold">All notices</h2>
+            <span className="font-mono text-[10px] uppercase text-muted-foreground">{filtered.length} shown</span>
           </div>
           {notices.isLoading ? (
-            <p className="font-mono text-sm">Loading the board…</p>
+            <p className="p-6 font-mono text-sm">Loading the board…</p>
           ) : filtered.length === 0 ? (
-            <p className="border-2 border-dashed border-foreground p-4 text-sm">No notices here yet.</p>
+            <p className="p-6 text-sm text-muted-foreground">No notices match these filters.</p>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{filtered.map((n) => card(n))}</div>
+            <div>{filtered.map((n) => card(n))}</div>
           )}
         </section>
+
+        <aside className="border-t border-border bg-background/60 p-5 sm:p-6 xl:col-span-3 xl:border-l xl:border-t-0">
+          <SectionTitle label="Approaching deadlines" note={`${urgent.length}`} />
+          {urgent.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No deadlines in the next two days.</p>
+          ) : (
+            <ol className="space-y-5">{urgent.map((n) => {
+              if (!n.due_at) return null;
+              const level = urgencyLevel(n.due_at);
+              return <li key={n.id} className={cn("border-l-2 pl-4", level === "urgent" && "border-urgent", level === "warning" && "border-warning", level === "watch" && "border-watch")}>
+                <p className={cn("font-mono text-[10px] font-semibold uppercase", level === "urgent" && "text-urgent", level === "warning" && "text-warning", level === "watch" && "text-watch-foreground")}>{timeLeft(n.due_at)}</p>
+                <h3 className="mt-1 text-sm font-bold leading-snug">{n.title}</h3>
+                <p className="mt-1 text-xs text-muted-foreground">{clubById.get(n.club_id)?.name} · {fmtDue(n.due_at)}</p>
+              </li>;
+            })}</ol>
+          )}
+          <div className="mt-8 border-t border-border pt-5 font-mono text-[10px] uppercase text-muted-foreground">
+            <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-urgent" /> Immediate</div>
+            <div className="mt-2 flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-warning" /> Later today</div>
+            <div className="mt-2 flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-watch" /> Tomorrow</div>
+          </div>
+        </aside>
       </main>
-      <footer className="mt-10 border-t-4 border-double border-foreground py-4 text-center font-mono text-[11px] uppercase tracking-wider">
+      <footer className="border-t border-border py-5 text-center font-mono text-[10px] uppercase text-muted-foreground">
         Club secretaries: <Link to="/post" className="underline">post from the club desk</Link>
       </footer>
     </div>
   );
 }
 
-function SectionTitle({ label, note }: { label: string; note?: string }) {
+function SectionTitle({ label, note }: { label: string; note?: string | undefined }) {
   return (
-    <div className="mb-3 flex items-baseline justify-between border-b-2 border-foreground pb-1">
-      <h2 className="text-xl uppercase sm:text-2xl">{label}</h2>
-      {note && <span className="font-mono text-xs uppercase text-muted-foreground">{note}</span>}
+    <div className="mb-4 flex items-baseline justify-between">
+      <h2 className="font-sans text-xs font-semibold uppercase text-muted-foreground">{label}</h2>
+      {note && <span className="font-mono text-[10px] uppercase text-muted-foreground">{note}</span>}
     </div>
   );
 }
 
 function Chip({ active, small, onClick, children }: { active: boolean; small?: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
-    <button
+    <Button
+      type="button"
+      variant={active ? "secondary" : "ghost"}
+      size="sm"
       onClick={onClick}
       className={cn(
-        "shrink-0 border-2 border-foreground font-mono uppercase tracking-wider transition-colors",
-        small ? "px-2 py-0.5 text-[11px]" : "px-3 py-1 text-xs font-semibold",
-        active ? "bg-foreground text-background" : "bg-card hover:bg-highlight",
+        "h-auto min-h-7 whitespace-normal px-2 py-1 text-left font-mono text-[10px] uppercase",
+        small && "min-h-6",
       )}
     >
       {children}
-    </button>
+    </Button>
   );
 }
