@@ -37,6 +37,7 @@ function ClubDesk() {
 
   const create = useMutation({
     mutationFn: async () => {
+      if (!myClub.data) throw new Error("This account is not linked to a club.");
       const { error } = await supabase.from("notices").insert({
         club_id: myClub.data,
         kind: form.kind,
