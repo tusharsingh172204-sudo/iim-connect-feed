@@ -158,7 +158,7 @@ function Board() {
   );
 }
 
-function SectionTitle({ label, note }: { label: string; note?: string }) {
+function SectionTitle({ label, note }: { label: string; note?: string | undefined }) {
   return (
     <div className="mb-4 flex items-baseline justify-between">
       <h2 className="font-sans text-xs font-semibold uppercase text-muted-foreground">{label}</h2>
