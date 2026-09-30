@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Club posting rights come from `club_logins` (email -> club) checked by `my_club_id()` in RLS; why: shared club logins, no client-side trust.
+- Deadline emphasis is derived from remaining time as red (within 6h), orange (within 24h), and amber (tomorrow); why: urgency stays consistent across every view.

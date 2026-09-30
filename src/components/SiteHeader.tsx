@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { Button } from "@/components/ui/button";
 
 export function SiteHeader() {
   const { user } = useAuth();
@@ -21,25 +22,20 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="border-b-4 border-double border-foreground">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 py-2 font-mono text-[11px] uppercase tracking-wider">
-        <span className="truncate">{today}</span>
-        <nav className="flex items-center gap-3">
-          <Link to="/post" className="hover:underline">Club desk</Link>
+    <header className="border-b border-border bg-card">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-5 sm:px-6 lg:px-8">
+        <Link to="/" className="min-w-0">
+          <span className="block font-mono text-[10px] font-semibold uppercase text-muted-foreground">IIM Nagpur · {today}</span>
+          <h1 className="mt-1 truncate text-2xl font-bold sm:text-3xl">Student Noticeboard</h1>
+        </Link>
+        <nav className="flex shrink-0 items-center gap-2">
+          <Button asChild size="sm"><Link to="/post">Club desk</Link></Button>
           {user ? (
-            <button onClick={signOut} className="hover:underline">Sign out</button>
+            <Button onClick={signOut} variant="ghost" size="sm">Sign out</Button>
           ) : (
-            <Link to="/auth" className="hover:underline">Sign in</Link>
+            <Button asChild variant="ghost" size="sm"><Link to="/auth">Sign in</Link></Button>
           )}
         </nav>
-      </div>
-      <div className="border-t border-foreground">
-        <Link to="/" className="mx-auto block max-w-6xl px-4 py-4 text-center">
-          <h1 className="text-4xl leading-none sm:text-6xl md:text-7xl">THE NOTICEBOARD</h1>
-          <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.3em] text-muted-foreground">
-            Indian Institute of Management Nagpur · All clubs · All deadlines
-          </p>
-        </Link>
       </div>
     </header>
   );

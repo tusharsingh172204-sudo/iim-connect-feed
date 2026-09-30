@@ -61,6 +61,15 @@ export function timeLeft(iso: string) {
   return `${Math.floor(h / 24)}d left`;
 }
 
+export type UrgencyLevel = "urgent" | "warning" | "watch";
+
+export function urgencyLevel(iso: string): UrgencyLevel {
+  const hours = (new Date(iso).getTime() - Date.now()) / 3.6e6;
+  if (hours <= 6) return "urgent";
+  if (hours <= 24) return "warning";
+  return "watch";
+}
+
 export function fmtDue(iso: string) {
   return new Date(iso).toLocaleString("en-IN", {
     weekday: "short",
