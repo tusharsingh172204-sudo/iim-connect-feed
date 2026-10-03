@@ -35,6 +35,12 @@
   --color-watch: var(--watch);
   --color-watch-foreground: var(--watch-foreground);
   --color-highlight: var(--highlight);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -65,6 +71,12 @@
   --watch: oklch(0.78 0.16 78);
   --watch-foreground: oklch(0.23 0.03 65);
   --highlight: oklch(0.91 0.012 84);
+  --brand: oklch(0.36 0.075 187);
+  --brand-foreground: oklch(0.98 0.008 86);
+  --success: oklch(0.48 0.105 148);
+  --success-foreground: oklch(0.98 0.008 86);
+  --info: oklch(0.5 0.13 250);
+  --info-foreground: oklch(0.98 0.008 86);
   --border: oklch(0.78 0.012 80);
   --input: oklch(0.72 0.012 80);
   --ring: oklch(0.55 0.22 28);

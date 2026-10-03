@@ -84,7 +84,7 @@ function Board() {
     <div className="min-h-screen bg-background">
       <SiteHeader />
       <main className="mx-auto max-w-7xl border-x border-border bg-card xl:grid xl:min-h-[calc(100vh-85px)] xl:grid-cols-12">
-        <aside className="border-b border-border bg-background/60 p-5 sm:p-6 xl:col-span-3 xl:border-b-0 xl:border-r">
+        <aside className="border-b border-border bg-brand/5 p-5 sm:p-6 xl:col-span-3 xl:border-b-0 xl:border-r">
           <SectionTitle label="Starred tracker" note={user ? `${starred.length}` : undefined} />
           {!user ? (
             <div className="border border-border bg-card p-4 text-sm">
@@ -116,7 +116,7 @@ function Board() {
         </aside>
 
         <section className="min-w-0 xl:col-span-6">
-          <div className="flex items-baseline justify-between border-b border-border px-5 py-4 sm:px-6">
+          <div className="flex items-baseline justify-between border-b-4 border-info bg-info/5 px-5 py-4 sm:px-6">
             <h2 className="text-xl font-bold">All notices</h2>
             <span className="font-mono text-[10px] uppercase text-muted-foreground">{filtered.length} shown</span>
           </div>
@@ -129,7 +129,7 @@ function Board() {
           )}
         </section>
 
-        <aside className="border-t border-border bg-background/60 p-5 sm:p-6 xl:col-span-3 xl:border-l xl:border-t-0">
+        <aside className="border-t border-border bg-watch/10 p-5 sm:p-6 xl:col-span-3 xl:border-l xl:border-t-0">
           <SectionTitle label="Approaching deadlines" note={`${urgent.length}`} />
           {urgent.length === 0 ? (
             <p className="text-sm text-muted-foreground">No deadlines in the next two days.</p>
@@ -161,7 +161,7 @@ function Board() {
 function SectionTitle({ label, note }: { label: string; note?: string | undefined }) {
   return (
     <div className="mb-4 flex items-baseline justify-between">
-      <h2 className="font-sans text-xs font-semibold uppercase text-muted-foreground">{label}</h2>
+        <h2 className="font-sans text-xs font-semibold uppercase text-brand">{label}</h2>
       {note && <span className="font-mono text-[10px] uppercase text-muted-foreground">{note}</span>}
     </div>
   );
@@ -175,7 +175,8 @@ function Chip({ active, small, onClick, children }: { active: boolean; small?: b
       size="sm"
       onClick={onClick}
       className={cn(
-        "h-auto min-h-7 whitespace-normal px-2 py-1 text-left font-mono text-[10px] uppercase",
+        "h-auto min-h-7 whitespace-normal px-2 py-1 text-left font-mono text-[10px] uppercase data-[state=active]:bg-success",
+        active && "bg-success text-success-foreground hover:bg-success/90 hover:text-success-foreground",
         small && "min-h-6",
       )}
     >

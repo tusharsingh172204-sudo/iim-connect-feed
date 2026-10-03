@@ -22,18 +22,18 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="border-b border-border bg-card">
+    <header className="border-b-4 border-success bg-brand text-brand-foreground">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-5 sm:px-6 lg:px-8">
         <Link to="/" className="min-w-0">
-          <span className="block font-mono text-[10px] font-semibold uppercase text-muted-foreground">IIM Nagpur · {today}</span>
+          <span className="block font-mono text-[10px] font-semibold uppercase text-brand-foreground/70">IIM Nagpur · {today}</span>
           <h1 className="mt-1 truncate text-2xl font-bold sm:text-3xl">Student Noticeboard</h1>
         </Link>
         <nav className="flex shrink-0 items-center gap-2">
-          <Button asChild size="sm"><Link to="/post">Club desk</Link></Button>
+          <Button asChild size="sm" className="bg-success text-success-foreground hover:bg-success/90"><Link to="/post">Club desk</Link></Button>
           {user ? (
-            <Button onClick={signOut} variant="ghost" size="sm">Sign out</Button>
+            <Button onClick={signOut} variant="ghost" size="sm" className="text-brand-foreground hover:bg-brand-foreground/10 hover:text-brand-foreground">Sign out</Button>
           ) : (
-            <Button asChild variant="ghost" size="sm"><Link to="/auth">Sign in</Link></Button>
+            <Button asChild variant="ghost" size="sm" className="text-brand-foreground hover:bg-brand-foreground/10 hover:text-brand-foreground"><Link to="/auth">Sign in</Link></Button>
           )}
         </nav>
       </div>
