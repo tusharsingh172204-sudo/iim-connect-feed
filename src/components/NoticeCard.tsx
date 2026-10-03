@@ -23,6 +23,8 @@ export function NoticeCard({
             "rounded-sm bg-muted px-1.5 py-0.5 text-foreground",
             notice.kind === "deadline" && "text-urgent",
             notice.kind === "extension" && "text-warning",
+            notice.kind === "notice" && "text-success",
+            notice.kind === "timeline" && "text-info",
           )}>{KIND_LABEL[notice.kind]}</span>
         </div>
         {onToggleStar && (
@@ -40,7 +42,7 @@ export function NoticeCard({
       <h3 className="mt-3 text-lg font-bold leading-snug sm:text-xl">{notice.title}</h3>
       {notice.body && <p className="mt-2 text-sm leading-relaxed text-foreground/80 whitespace-pre-line">{notice.body}</p>}
       {notice.link && (
-        <a href={notice.link} target="_blank" rel="noreferrer" className="mt-2 inline-block text-sm font-semibold underline">
+        <a href={notice.link} target="_blank" rel="noreferrer" className="mt-2 inline-block text-sm font-semibold text-info underline">
           Open link →
         </a>
       )}
