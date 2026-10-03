@@ -9,6 +9,7 @@ import { NoticeCard } from "@/components/NoticeCard";
 import { endOfTomorrow, fetchClubs, fetchNotices, fetchStars, KIND_LABEL, urgencyLevel, timeLeft, fmtDue, type Notice } from "@/lib/board";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import prodgLogo from "@/assets/prodg-logo.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -151,8 +152,16 @@ function Board() {
           </div>
         </aside>
       </main>
-      <footer className="border-t border-border py-5 text-center font-mono text-[10px] uppercase text-muted-foreground">
-        Club secretaries: <Link to="/post" className="underline">post from the club desk</Link>
+      <footer className="border-t-4 border-success bg-brand px-4 py-4 text-brand-foreground">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 sm:flex-row">
+          <p className="font-mono text-[10px] uppercase text-brand-foreground/70">Club secretaries: <Link to="/post" className="underline">post from the club desk</Link></p>
+          <div className="flex items-center gap-3">
+            <span className="font-mono text-[10px] font-semibold uppercase text-brand-foreground/70">Developed by</span>
+            <span className="flex h-12 w-24 items-center justify-center bg-card px-2 py-1">
+              <img src={prodgLogo.url} alt="ProdG — The Product Management Club" className="h-full w-full object-contain" />
+            </span>
+          </div>
+        </div>
       </footer>
     </div>
   );
