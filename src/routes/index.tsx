@@ -84,8 +84,8 @@ function Board() {
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
-      <main className="mx-auto max-w-7xl border-x border-border bg-card xl:grid xl:min-h-[calc(100vh-85px)] xl:grid-cols-12">
-        <aside className="border-b border-border bg-brand/5 p-5 sm:p-6 xl:col-span-3 xl:border-b-0 xl:border-r">
+      <main className="mx-auto grid max-w-7xl grid-cols-1 border-x border-border bg-card xl:min-h-[calc(100vh-85px)] xl:grid-cols-12">
+        <aside className="order-1 border-b border-border bg-brand/5 p-5 sm:p-6 xl:col-span-3 xl:border-b-0 xl:border-r">
           <SectionTitle label="Starred tracker" note={user ? `${starred.length}` : undefined} />
           {!user ? (
             <div className="border border-border bg-card p-4 text-sm">
@@ -116,7 +116,7 @@ function Board() {
           </div>
         </aside>
 
-        <section className="min-w-0 xl:col-span-6">
+        <section className="order-3 min-w-0 xl:order-2 xl:col-span-6">
           <div className="flex items-baseline justify-between border-b-4 border-info bg-info/5 px-5 py-4 sm:px-6">
             <h2 className="text-xl font-bold">All notices</h2>
             <span className="font-mono text-[10px] uppercase text-muted-foreground">{filtered.length} shown</span>
@@ -130,7 +130,7 @@ function Board() {
           )}
         </section>
 
-        <aside className="border-t border-border bg-watch/10 p-5 sm:p-6 xl:col-span-3 xl:border-l xl:border-t-0">
+        <aside className="order-2 border-b border-border bg-watch/10 p-5 sm:p-6 xl:order-3 xl:col-span-3 xl:border-b-0 xl:border-l">
           <SectionTitle label="Approaching deadlines" note={`${urgent.length}`} />
           {urgent.length === 0 ? (
             <p className="text-sm text-muted-foreground">No deadlines in the next two days.</p>
