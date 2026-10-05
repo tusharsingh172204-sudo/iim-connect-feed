@@ -6,4 +6,5 @@
 - [x] Editorial typography, neutral styling, and three-level urgency accents
 - [x] Add restrained campus colors across the public noticeboard
 - [x] Apply IIM Nagpur and ProdG logo branding with a logo-led palette
+- [x] Fix mobile header readability and surface approaching deadlines before the full feed
 - [ ] Eques login (waiting on: Eques inbox email)

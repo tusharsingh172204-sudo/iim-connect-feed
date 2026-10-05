@@ -24,17 +24,17 @@ export function SiteHeader() {
 
   return (
     <header className="border-b-4 border-success bg-brand text-brand-foreground">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:gap-4 sm:px-6 lg:px-8">
+      <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 px-4 py-3 sm:gap-4 sm:px-6 lg:px-8">
         <Link to="/" className="flex min-w-0 items-center gap-3 sm:gap-4">
-          <span className="flex h-16 w-16 shrink-0 items-center justify-center bg-card p-1 sm:h-20 sm:w-20">
+          <span className="flex h-14 w-14 shrink-0 items-center justify-center bg-card p-1 sm:h-20 sm:w-20">
             <img src={iimNagpurLogo.url} alt="IIM Nagpur" className="h-full w-full object-contain" />
           </span>
           <span className="min-w-0">
             <span className="block font-mono text-[9px] font-semibold uppercase text-brand-foreground/70 sm:text-[10px]">IIM Nagpur · {today}</span>
-            <h1 className="mt-1 truncate text-xl font-bold sm:text-3xl">Student Noticeboard</h1>
+            <h1 className="mt-1 text-lg font-bold leading-tight sm:text-3xl">Student Noticeboard</h1>
           </span>
         </Link>
-        <nav className="flex shrink-0 items-center gap-2">
+        <nav className="col-span-2 flex min-w-0 items-center justify-end gap-1.5 sm:col-span-1 sm:gap-2">
           <Button asChild size="sm" className="bg-success text-success-foreground hover:bg-success/90"><Link to="/post">Club desk</Link></Button>
           {user ? (
             <Button onClick={signOut} variant="ghost" size="sm" className="text-brand-foreground hover:bg-brand-foreground/10 hover:text-brand-foreground">Sign out</Button>
