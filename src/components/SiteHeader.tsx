@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import iimNagpurLogo from "@/assets/iim-nagpur-logo.png.asset.json";
+import { InstallButton } from "@/components/InstallButton";
 
 export function SiteHeader() {
   const { user } = useAuth();
@@ -35,6 +36,7 @@ export function SiteHeader() {
           </span>
         </Link>
         <nav className="col-span-2 flex min-w-0 items-center justify-end gap-1.5 sm:col-span-1 sm:gap-2">
+          <InstallButton />
           <Button asChild size="sm" className="bg-success text-success-foreground hover:bg-success/90"><Link to="/post">Club desk</Link></Button>
           {user ? (
             <Button onClick={signOut} variant="ghost" size="sm" className="text-brand-foreground hover:bg-brand-foreground/10 hover:text-brand-foreground">Sign out</Button>
