@@ -13,3 +13,4 @@
 - Deadline emphasis is derived from remaining time as red (within 6h), orange (within 24h), and amber (tomorrow); why: urgency stays consistent across every view.
 - Non-urgency interface color uses semantic brand, success, and info tokens; why: the board stays lively without weakening deadline signals.
 - Site identity uses the supplied IIM Nagpur and ProdG logos with a charcoal, gold, and white palette; why: the noticeboard should visibly reflect both institutions.
+- Home-screen installation uses manifest metadata and a header prompt without an app-shell service worker; why: installability must not interfere with Lovable previews or add unrequested offline behavior.
