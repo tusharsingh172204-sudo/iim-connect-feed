@@ -7,6 +7,7 @@ type BIP = Event & { prompt: () => Promise<void>; userChoice: Promise<{ outcome:
 export function InstallButton() {
   const [evt, setEvt] = useState<BIP | null>(null);
   const [installed, setInstalled] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
 
   useEffect(() => {
     setInstalled(window.matchMedia("(display-mode: standalone)").matches);
@@ -27,15 +28,24 @@ export function InstallButton() {
       await evt.prompt();
       await evt.userChoice;
       setEvt(null);
+      setShowInstructions(false);
       return;
     }
-    const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
-    toast(ios ? "On iPhone: tap Share, then “Add to Home Screen”." : "Open your browser menu (⋮) and tap “Install app” or “Add to Home screen”.", { duration: 8000 });
+    setShowInstructions((visible) => !visible);
   }
 
   return (
-    <Button onClick={install} variant="ghost" size="sm" className="text-brand-foreground hover:bg-brand-foreground/10 hover:text-brand-foreground">
-      Install app
-    </Button>
+    <span className="relative inline-flex">
+      <Button onClick={install} variant="ghost" size="sm" aria-expanded={showInstructions} className="text-brand-foreground hover:bg-brand-foreground/10 hover:text-brand-foreground">
+        Install app
+      </Button>
+      {showInstructions && (
+        <span role="status" className="absolute right-0 top-full z-50 mt-2 w-64 border border-border bg-card p-3 text-left text-xs leading-relaxed text-card-foreground shadow-md">
+          {/iphone|ipad|ipod/i.test(navigator.userAgent)
+            ? "On iPhone: tap Share, then “Add to Home Screen”."
+            : "Open your browser menu (⋮) and choose “Install app” or “Add to Home screen”."}
+        </span>
+      )}
+    </span>
   );
 }
