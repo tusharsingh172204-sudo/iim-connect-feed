@@ -7,4 +7,6 @@
 - [x] Add restrained campus colors across the public noticeboard
 - [x] Apply IIM Nagpur and ProdG logo branding with a logo-led palette
 - [x] Fix mobile header readability and surface approaching deadlines before the full feed
+- [ ] Add an install-app option and opt-in phone notifications for every new club post
+- [ ] Connect noticeboard.iimnagpur.ac.in (blocked: custom domains require a paid plan)
 - [ ] Eques login (waiting on: Eques inbox email)
