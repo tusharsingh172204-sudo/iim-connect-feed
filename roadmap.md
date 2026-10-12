@@ -11,3 +11,4 @@
 - [ ] Send phone push notifications when followed clubs post, after students opt in (blocked: workspace access is required to connect Firebase)
 - [ ] Connect noticeboard.iimnagpur.ac.in (blocked: custom domains require a paid plan)
 - [ ] Eques login (waiting on: Eques inbox email)
+- [ ] Publish the current noticeboard for public access
